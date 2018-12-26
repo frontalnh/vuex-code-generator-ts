@@ -35,45 +35,45 @@ function generateStore(component, domain) {
   import { UpdateOption, DeleteOption } from 'common/models/QueryOption';
   const qs = require('qs');
   
-  class Transaction {
+  class ${upper} {
     id: number;
   }
   
   class State {
-    createdItem: Transaction;
-    allItems: Transaction[];
-    pagedItems: Transaction[];
+    createdItem: ${upper};
+    allItems: ${upper}[];
+    pagedItems: ${upper}[];
   }
   
   export const state = () => ({
-    createdItem: Transaction,
+    createdItem: ${upper},
     allItems: [],
     pagedItems: []
   });
   
   export const mutations = {
-    create(state: State, transaction: Transaction) {
-      state.createdItem = transaction;
+    create(state: State, ${camel}: ${upper}) {
+      state.createdItem = ${camel};
     },
-    fetchAll(state: State, transactions: Transaction[]) {
-      state.allItems = transactions;
+    fetchAll(state: State, ${camel}s: ${upper}[]) {
+      state.allItems = ${camel}s;
     },
-    fetchPage(state: State, transactions: Transaction[]) {
-      state.pagedItems = transactions;
+    fetchPage(state: State, ${camel}s: ${upper}[]) {
+      state.pagedItems = ${camel}s;
     },
     update(
       state: State,
-      transaction: Partial<Transaction>,
-      option: UpdateOption<Transaction>
+      ${camel}: Partial<${upper}>,
+      option: UpdateOption<${upper}>
     ) {
       state.pagedItems.forEach((v, i) => {
-        if (option.isIncluded(v)) Object.assign(v, transaction);
+        if (option.isIncluded(v)) Object.assign(v, ${camel});
       });
       state.allItems.forEach((v, i) => {
-        if (option.isIncluded(v)) Object.assign(v, transaction);
+        if (option.isIncluded(v)) Object.assign(v, ${camel});
       });
     },
-    delete(state: State, option: DeleteOption<Transaction>) {
+    delete(state: State, option: DeleteOption<${upper}>) {
       state.pagedItems.filter(item => !option.isIncluded(item));
       state.allItems.filter(item => !option.isIncluded(item));
     },
@@ -84,15 +84,15 @@ function generateStore(component, domain) {
   };
   
   export const actions = {
-    async create({ commit }, transaction: Transaction) {
+    async create({ commit }, ${camel}: ${upper}) {
       let { data } = await Axios.post(
-        Constants.ServerUrl + '/transactions',
-        transaction
+        Constants.ServerUrl + '/${camel}s',
+        ${camel}
       );
-      let createdTransaction = data;
+      let created${upper} = data;
   
-      console.log('Created transaction: ', createdTransaction);
-      commit('create', createdTransaction);
+      console.log('Created ${camel}: ', created${upper});
+      commit('create', created${upper});
     },
   
     async fetchAll({ commit }, filter: Filter) {
@@ -100,39 +100,39 @@ function generateStore(component, domain) {
       let query = qs.stringify(filter);
       console.log('$$$$', query);
       let { data } = await Axios.get(
-        Constants.ServerUrl + '/transactions?' + query
+        Constants.ServerUrl + '/${camel}s?' + query
       );
-      let transactions = data.payload;
+      let ${camel}s = data.payload;
   
-      console.log('Number of fetched transactions: ', transactions.length);
-      commit('fetchAll', transactions);
+      console.log('Number of fetched ${camel}s: ', ${camel}s.length);
+      commit('fetchAll', ${camel}s);
     },
   
     async fetchPage({ commit }, filter: Filter) {
       let query = qs.stringify(filter);
       let { data } = await Axios.get(
-        Constants.ServerUrl + '/transactions?' + query
+        Constants.ServerUrl + '/${camel}s?' + query
       );
-      let transactions = data.payload;
+      let ${camel}s = data.payload;
   
-      console.log('Fetched transactions: ', transactions);
-      commit('fetchPage', transactions);
+      console.log('Fetched ${camel}s: ', ${camel}s);
+      commit('fetchPage', ${camel}s);
     },
   
     async update(
       { commit },
-      transaction: Partial<Transaction>,
-      option: UpdateOption<Transaction>
+      ${camel}: Partial<${upper}>,
+      option: UpdateOption<${upper}>
     ) {
-      await Axios.put(Constants.ServerUrl + '/transactions', {
-        transaction,
+      await Axios.put(Constants.ServerUrl + '/${camel}s', {
+        ${camel},
         option
       });
-      commit('update', transaction, option);
+      commit('update', ${camel}, option);
     },
   
-    async delete({ commit }, option: DeleteOption<Transaction>) {
-      await Axios.put(Constants.ServerUrl + '/transactions', {
+    async delete({ commit }, option: DeleteOption<${upper}>) {
+      await Axios.put(Constants.ServerUrl + '/${camel}s', {
         option
       });
   
