@@ -5,6 +5,7 @@ const program = require('commander');
 const store = 'store';
 const generateStore = require('../src/generateStore');
 const generateHttpHelper = require('../src/generateHttpHelper');
+const generateCommon = require('../src/generateCommon');
 
 program
   .version('0.0.1')
@@ -19,6 +20,7 @@ program
       case store: {
         let result = generateStore(domain);
         generateHttpHelper();
+        generateCommon();
         return result;
       }
     }
